@@ -293,7 +293,7 @@ function createSettingsWindow() {
     settingsWindow.setMenu(null); // 这将删除菜单栏
 
     settingsWindow.loadFile(path.join(__dirname, 'settings.html')); // 指定设置页面的 HTML
-    settingsWindow.webContents.openDevTools();
+    // settingsWindow.webContents.openDevTools();
     // 当窗口关闭时，清理 settingsWindow 变量
     settingsWindow.on('closed', () => {
         settingsWindow = null;
@@ -354,7 +354,7 @@ ipcMain.on('set-prevent-ratio', (event, ratio) => {
 
 ipcMain.on('set-toggle-delay', (event, delay) => {
     console.log("Set delay", delay)
-    toggleDelay = delay;
+    toggleDelay = Number(delay);
     saveConfig({ 'toggleDelay': toggleDelay });
 });
 
@@ -368,7 +368,7 @@ ipcMain.on('set-prevent-left', (event, left) => {
 // activeRight
 ipcMain.on('set-active-right', (event, right) => {
     console.log("Set right", right)
-    activeRight = right;
+    activeRight = Number(right);
     saveConfig({ 'activeRight': activeRight });
 });
 
@@ -553,7 +553,17 @@ ipcMain.on('get-gpt-site', (event) => {
 ipcMain.on('set-gpt-site', (event, site) => {
     console.log("Set site", site)
     gptSite = site;
+    mainWindow.loadURL(gptSite);
+    mainWindow.reload();
     saveConfig({ 'gptSite': gptSite });
+    dialog.showMessageBox({
+        type: 'info', // 设置消息框的样式
+        message: '重新启动以生效',
+        icon: path.join(__dirname, 'gpt.png'), // 设置消息框的图标
+        noLink: true, // 禁止链接
+        normalizeAccessKeys: true, // 正常化访问键
+        buttons: ['OK']
+    });
 });
 
 ipcMain.on('set-textarea-id', (event, id) => {
@@ -592,6 +602,7 @@ ipcMain.on('recover-default', (event) => {
     }).then(result => {
         if(result.response === 1) {
             saveConfig(defaultConfig);
+            setDataFromConfig(defaultConfig);
             dialog.showMessageBox({
                 type: 'info', // 设置消息框的样式
                 message: '恢复成功！',
@@ -601,6 +612,10 @@ ipcMain.on('recover-default', (event) => {
                 buttons: ['OK']
             });
             mainWindow.reload();
+            setTimeout(() => {
+                settingsWindow.reload();
+            }, 100);
+           
         }
     }
     );
@@ -629,6 +644,10 @@ ipcMain.on('clear-data', (event) => {
                 buttons: ['OK']
             });
             mainWindow.reload();
+            setTimeout(() => {
+                settingsWindow.reload();
+            }, 100);
+            
         }
     }
     );
@@ -659,12 +678,7 @@ app.on('activate', () => {
     }
 });
 
-app.on('ready', () => {
-    // saveConfig(defaultConfig);
-    const config = loadConfig();
-
-    // 从配置中加载设置
-    // 使用配置
+function setDataFromConfig(config){
     sidebarWidth = config.sidebarWidth;
     preventRatio = config.preventRatio;
     toggleDelay = config.toggleDelay;
@@ -685,6 +699,15 @@ app.on('ready', () => {
 
     taskbarHeight = fullScreenHeight - workAreaHeight;
     console.log(taskbarHeight);
+}
+
+app.on('ready', () => {
+    // saveConfig(defaultConfig);
+    const config = loadConfig();
+
+    // 从配置中加载设置
+    // 使用配置
+    setDataFromConfig(config);
 
     let success = globalShortcut.register(quickEnterShortcut, () => {
         appendClipboard(); // 执行注入 JavaScript

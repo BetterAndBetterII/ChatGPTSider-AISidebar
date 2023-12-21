@@ -17,9 +17,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
     // set-prevent-left
     setPreventLeft: (preventLeft) => ipcRenderer.send('set-prevent-left', preventLeft),
     // activeRight
-    activeRight: (activeRight) => ipcRenderer.send('active-right', activeRight),
+    setActiveRight: (activeRight) => ipcRenderer.send('set-active-right', activeRight),
     // togglePeriod
-    togglePeriod: (togglePeriod) => ipcRenderer.send('toggle-period', togglePeriod),
+    setTogglePeriod: (togglePeriod) => ipcRenderer.send('set-toggle-period', togglePeriod),
     getPreventRatio: (callback) => {
         ipcRenderer.once('prevent-ratio', (event, text) => {
             callback(text);

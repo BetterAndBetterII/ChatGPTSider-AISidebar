@@ -231,6 +231,7 @@
                         onchange='enableButton("setWidth")'>
                     <button id="setWidth" onclick="setWidth()">确定</button>
                 </div>
+                
             </div>
 
             <div class="form-group">
@@ -240,6 +241,7 @@
                         onchange="enableButton('setPreventRatio')">
                     <button id="setPreventRatio" onclick="setPreventRatio()">确定</button>
                 </div>
+                <div class="detail">屏幕高度上ratio%与下 ratio%的区域不会触发展开</div>
             </div>
 
             <div class="form-group">
@@ -249,6 +251,7 @@
                         onchange="enableButton('setToggleDelay')">
                     <button id="setToggleDelay" onclick="setToggleDelay()">确定</button>
                 </div>
+                <div class="detail">收起与展开操作后的不应期</div>
             </div>
 
             <div class="form-group">
@@ -258,7 +261,7 @@
                         onchange="enableButton('setPreventLeft')">
                     <button id="setPreventLeft" onclick="setPreventLeft()">确定</button>
                 </div>
-
+                <div class="detail">展开后窗口左侧n px不会触发收起</div>
             </div>
 
             <div class="form-group">
@@ -268,6 +271,7 @@
                         onchange="enableButton('setActiveRight')">
                     <button id="setActiveRight" onclick="setActiveRight()">确定</button>
                 </div>
+                <div class="detail">屏幕右n px触发展开</div>
             </div>
 
             <div class="form-group">
@@ -277,6 +281,7 @@
                         onchange="enableButton('setTogglePeriod')">
                     <button id="setTogglePeriod" onclick="setTogglePeriod()">确定</button>
                 </div>
+                <div class="detail">收起与展开操作的动画时长</div>
             </div>
             <div class="subtitle">恢复</div>
             <div class="row">
@@ -317,7 +322,7 @@
                     <button id="setQuickHideAndShow" onclick="setQuickHideAndShow()">确定</button>
                 </div>
                 <ul class="suggestions" id="quickHideAndShow-shortcuts" style="display: none;">
-                    <li onclick="selectOption('quickHideAndShow', 'Control+Alt')">Control+Alt</li>
+                    <li onclick="selectOption('quickHideAndShow', 'Control+Alt')">Alt+Space</li>
                     <!-- Add more options as needed -->
                 </ul>
                 <div class="detail">快速收起/展开可以帮你在误触时快速收起，或者快速唤起并输入</div>

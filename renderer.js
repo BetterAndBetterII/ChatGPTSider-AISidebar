@@ -17,6 +17,9 @@ function setWidth() {
   window.electronAPI.setWindowWidth(parseInt(width));
   // 假设你已经在 preload.js 中暴露了 showDialog 方法
   window.electronAPI.showDialog('设置成功');
+  setTimeout(() => {
+    getAllData();
+  }, 100);
 }
 
 function setPreventRatio() {
@@ -28,6 +31,9 @@ function setPreventRatio() {
   setPreventRatioButton.disabled = true; // 禁用按钮
   window.electronAPI.setPreventRatio(preventRatio / 100);
   window.electronAPI.showDialog('设置成功');
+  setTimeout(() => {
+    getAllData();
+  }, 100);
 }
 
 function setToggleDelay() {
@@ -39,6 +45,9 @@ function setToggleDelay() {
   setToggleDelayButton.disabled = true; // 禁用按钮
   window.electronAPI.setToggleDelay(toggleDelay);
   window.electronAPI.showDialog('设置成功');
+  setTimeout(() => {
+    getAllData();
+  }, 100);
 }
 
 function setPreventLeft() {
@@ -50,6 +59,9 @@ function setPreventLeft() {
   setPreventLeftButton.disabled = true; // 禁用按钮
   window.electronAPI.setPreventLeft(preventLeft);
   window.electronAPI.showDialog('设置成功');
+  setTimeout(() => {
+    getAllData();
+  }, 100);
 }
 
 function setActiveRight() {
@@ -59,8 +71,11 @@ function setActiveRight() {
   const activeRight = activeRightInput.value;
 
   activeRightButton.disabled = true; // 禁用按钮
-  window.electronAPI.activeRight(activeRight);
+  window.electronAPI.setActiveRight(activeRight);
   window.electronAPI.showDialog('设置成功');
+  setTimeout(() => {
+    getAllData();
+  }, 100);
 }
 
 function setTogglePeriod() {
@@ -70,8 +85,11 @@ function setTogglePeriod() {
   const togglePeriod = togglePeriodInput.value;
 
   togglePeriodButton.disabled = true; // 禁用按钮
-  window.electronAPI.togglePeriod(togglePeriod);
+  window.electronAPI.setTogglePeriod(togglePeriod);
   window.electronAPI.showDialog('设置成功');
+  setTimeout(() => {
+    getAllData();
+  }, 100);
 }
 
 function setQuickEnterShortcut() {
@@ -98,8 +116,11 @@ function setGptSite() {
   const gptSite = gptSiteInput.value;
 
   gptSiteButton.disabled = true; // 禁用按钮
-  window.electronAPI.gptSite(gptSite);
+  window.electronAPI.setGptSite(gptSite);
   window.electronAPI.showDialog('设置成功');
+  setTimeout(() => {
+    getAllData();
+  }, 100);
 }
 
 function setTextareaId() {
@@ -111,6 +132,9 @@ function setTextareaId() {
   textareaIdButton.disabled = true; // 禁用按钮
   window.electronAPI.setTextareaId(textareaId);
   window.electronAPI.showDialog('设置成功');
+  setTimeout(() => {
+    getAllData();
+  }, 100);
 }
 
 function setQuickHideAndShow() {
@@ -128,6 +152,9 @@ function setQuickHideAndShow() {
     }
     );
   }, 100);
+  setTimeout(() => {
+    getAllData();
+  }, 100);
 }
 
 function setSendText() {
@@ -144,6 +171,9 @@ function setSendText() {
       sendTextInput.value = sendText;
     }
     );
+  }, 100);
+  setTimeout(() => {
+    getAllData();
   }, 100);
 }
 
@@ -189,75 +219,79 @@ function selectOption(id, option) {
   enableButton('set' + id.replace(/^[a-z]/, firstLetter => firstLetter.toUpperCase()));  //首字母大写
 }
 
-function recover(){
+function recover() {
+  console.log('recover');
   window.electronAPI.recoverDefault();
 }
 
-function clearData(){
+function clearData() {
+  console.log('clearData');
   window.electronAPI.clearData();
 }
 
+function getAllData() {
+  console.log("getAllData");
+  window.electronAPI.getPreventRatio((preventRatio) => {
+    const preventRatioInput = document.getElementById('preventRatio');
+    preventRatioInput.value = preventRatio * 100;
+  });
 
-window.electronAPI.getPreventRatio((preventRatio) => {
-  const preventRatioInput = document.getElementById('preventRatio');
-  preventRatioInput.value = preventRatio * 100;
-});
+  window.electronAPI.getToggleDelay((toggleDelay) => {
+    const toggleDelayInput = document.getElementById('toggleDelay');
+    toggleDelayInput.value = toggleDelay;
+  }
+  );
 
-window.electronAPI.getToggleDelay((toggleDelay) => {
-  const toggleDelayInput = document.getElementById('toggleDelay');
-  toggleDelayInput.value = toggleDelay;
+  window.electronAPI.getPreventLeft((preventLeft) => {
+    const preventLeftInput = document.getElementById('preventLeft');
+    preventLeftInput.value = preventLeft;
+  }
+  );
+
+  window.electronAPI.getActiveRight((activeRight) => {
+    const activeRightInput = document.getElementById('activeRight');
+    activeRightInput.value = activeRight;
+  }
+  );
+
+  window.electronAPI.getTogglePeriod((togglePeriod) => {
+    const togglePeriodInput = document.getElementById('togglePeriod');
+    togglePeriodInput.value = togglePeriod;
+  }
+  );
+
+  window.electronAPI.getQuickEnterShortcut((quickEnterShortcut) => {
+    const quickEnterShortcutInput = document.getElementById('quickEnterShortcut');
+    quickEnterShortcutInput.value = quickEnterShortcut;
+  }
+  );
+
+  window.electronAPI.getGptSite((gptSite) => {
+    const gptSiteInput = document.getElementById('gptSite');
+    gptSiteInput.value = gptSite;
+  }
+  );
+
+  // textareaId
+  window.electronAPI.getTextareaId((textareaId) => {
+    const textareaIdInput = document.getElementById('textareaId');
+    textareaIdInput.value = textareaId;
+  }
+  );
+
+  window.electronAPI.getQuickHideAndShow((quickHideAndShow) => {
+    const quickHideAndShowInput = document.getElementById('quickHideAndShow');
+    quickHideAndShowInput.value = quickHideAndShow;
+  }
+  );
+
+  // sendText
+  window.electronAPI.getSendText((sendText) => {
+    const sendTextInput = document.getElementById('sendText');
+    sendTextInput.value = sendText;
+  }
+  );
 }
-);
-
-window.electronAPI.getPreventLeft((preventLeft) => {
-  const preventLeftInput = document.getElementById('preventLeft');
-  preventLeftInput.value = preventLeft;
-}
-);
-
-window.electronAPI.getActiveRight((activeRight) => {
-  const activeRightInput = document.getElementById('activeRight');
-  activeRightInput.value = activeRight;
-}
-);
-
-window.electronAPI.getTogglePeriod((togglePeriod) => {
-  const togglePeriodInput = document.getElementById('togglePeriod');
-  togglePeriodInput.value = togglePeriod;
-}
-);
-
-window.electronAPI.getQuickEnterShortcut((quickEnterShortcut) => {
-  const quickEnterShortcutInput = document.getElementById('quickEnterShortcut');
-  quickEnterShortcutInput.value = quickEnterShortcut;
-}
-);
-
-window.electronAPI.getGptSite((gptSite) => {
-  const gptSiteInput = document.getElementById('gptSite');
-  gptSiteInput.value = gptSite;
-}
-);
-
-// textareaId
-window.electronAPI.getTextareaId((textareaId) => {
-  const textareaIdInput = document.getElementById('textareaId');
-  textareaIdInput.value = textareaId;
-}
-);
-
-window.electronAPI.getQuickHideAndShow((quickHideAndShow) => {
-  const quickHideAndShowInput = document.getElementById('quickHideAndShow');
-  quickHideAndShowInput.value = quickHideAndShow;
-}
-);
-
-// sendText
-window.electronAPI.getSendText((sendText) => {
-  const sendTextInput = document.getElementById('sendText');
-  sendTextInput.value = sendText;
-}
-);
 
 
 
@@ -286,8 +320,13 @@ function switchContent(sectionId) {
   }
 }
 
+getAllData();
 
 
+// 循环获取数据/200ms
+// setInterval(() => {
+//   getAllData();
+// }, 200);
 
 // set-prevent-ratio
 // set-toggle-delay

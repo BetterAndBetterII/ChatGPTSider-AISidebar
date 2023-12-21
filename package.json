@@ -29,6 +29,10 @@
       "icon": "gpt.ico",
       "target": "nsis"
     },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
     "linux": {
       "icon": "gpt.png",
       "target": "AppImage"
