@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Settings</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            /* 确保所有元素的 padding 和 border 不会增加到宽度和高度上 */
+        }
+
+        html,
+        body {
+            height: 100%;
+            /* 设置 html 和 body 的高度为 100%，这是必需的，以便子元素可以使用百分比高度 */
+            margin: 0;
+            /* 移除默认边距 */
+            overflow: hidden;
+            /* 防止 body 出现滚动条 */
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            /* 设置整个 body 的高度为视口高度 */
+        }
+
+        .sidebar {
+            min-width: 150px;
+            width: 150px;
+            flex-shrink: 0;
+            background-color: #f2f2f2;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            /* 如果侧边栏内容过多，则显示滚动条 */
+            height: 100%;
+            /* 使侧边栏填满整个高度 */
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin-top: 0;
+        }
+
+        .sidebar p {
+            width: 100%;
+            margin: 0;
+            padding: 10px 0;
+            cursor: pointer;
+            color: #666;
+            width: 100%;
+            padding-left: 10px;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            flex-grow: 1;
+            /* 允许内容区域在需要时滚动 */
+            height: 100vh;
+            /* 直接使用视口高度作为参考，这样它不会超出屏幕 */
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* 这会将按钮推到右边 */
+        }
+
+        .row input {
+            flex-grow: 1;
+            /* 输入框将占据剩余空间 */
+
+            padding: 8px 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 45px;
+            margin: 5px 0;
+            margin-right: 10px;
+            /* 在输入框和按钮之间提供一些间隙 */
+        }
+
+        .row button {
+            padding: 8px 10px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-left: 40px;
+            white-space: nowrap;
+            /* 防止按钮换行 */
+            width: auto;
+            /* 或者您可以设置一个固定的宽度 */
+            margin-left: auto;
+            /* 这会自动调整左边的间距，将按钮推到右边 */
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border-color: #007bff;
+        }
+
+        button:hover {
+            background-color: #0069d9;
+        }
+
+        button:disabled {
+            background-color: #778899;
+            /* 灰蓝色 */
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .content-section {
+            display: none;
+            /* 默认隐藏所有内容区域 */
+        }
+
+        /* 当内容区域被激活时 */
+        .content-section.active {
+            display: block;
+            /* 显示激活的内容区域 */
+        }
+
+        .subtitle {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px auto 20px 0;
+        }
+
+        /* Style the focus state of the input field */
+        #quickEnterShortcut:focus {
+            outline: none;
+            border-color: #4A90E2;
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.5);
+        }
+
+        .detail {
+            font-size: 14px;
+            color: #778899;
+            margin-bottom: 20px;
+        }
+
+        /* 关于部分样式 */
+        .sidebar p:hover {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .active {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        #about p {
+            margin-bottom: 10px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        #about a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        #about a:hover {
+            text-decoration: underline;
+        }
+
+        /* ul 样式 */
+        .suggestions {
+            display: none;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        /* li 样式 */
+        .suggestions li {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .suggestions li:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <h2>设置</h2>
+        <p class="nav" id="general-nav" onclick="switchContent('general');">常规</p>
+        <p class="nav" id="advanced-nav" onclick="switchContent('advanced')">高级</p>
+        <p class="nav" id="about-nav" onclick="switchContent('about')">关于</p>
+        <!-- 可以在这里添加更多的导航项 -->
+    </div>
+    <div class="content">
+        <div id="general" class="content-section">
+            <div class="subtitle" style="margin-top: 0;">窗口</div>
+            <!-- 常规设置内容 -->
+            <div class="form-group">
+                <label for="width">窗口宽度(px):</label>
+                <div class="row">
+                    <input type='number' id='width' name='width' min='100' value='600'
+                        onchange='enableButton("setWidth")'>
+                    <button id="setWidth" onclick="setWidth()">确定</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="preventRatio">防误触比例(%):</label>
+                <div class="row">
+                    <input type='number' id='preventRatio' name='preventRatio' min='0' value='100'
+                        onchange="enableButton('setPreventRatio')">
+                    <button id="setPreventRatio" onclick="setPreventRatio()">确定</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="toggleDelay">切换延迟(ms):</label>
+                <div class="row">
+                    <input type="number" id="toggleDelay" name="toggleDelay" min="0" value="2000"
+                        onchange="enableButton('setToggleDelay')">
+                    <button id="setToggleDelay" onclick="setToggleDelay()">确定</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="preventLeft">左侧防误触(px):</label>
+                <div class="row">
+                    <input type="number" id="preventLeft" name="preventLeft" min="0" value="0"
+                        onchange="enableButton('setPreventLeft')">
+                    <button id="setPreventLeft" onclick="setPreventLeft()">确定</button>
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label for="activeRight">右侧展开检测(px):</label>
+                <div class="row">
+                    <input type="number" id="activeRight" name="activeRight" min="0" value="0"
+                        onchange="enableButton('setActiveRight')">
+                    <button id="setActiveRight" onclick="setActiveRight()">确定</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="togglePeriod">切换周期:</label>
+                <div class="row">
+                    <input type="number" id="togglePeriod" name="togglePeriod" min="0" value="0"
+                        onchange="enableButton('setTogglePeriod')">
+                    <button id="setTogglePeriod" onclick="setTogglePeriod()">确定</button>
+                </div>
+            </div>
+            <div class="subtitle">恢复</div>
+            <div class="row">
+                <button id="recovery" onclick="recover()" style="margin-right: auto; margin-left:0;">恢复默认设置</button>
+            </div>
+            <div class="subtitle">清除用户登录信息</div>
+            <div class="row">
+                <button id="clearData" onclick="clearData()" style="margin-right: auto;  margin-left:0; background-color:brown;">清除</button>
+            </div>
+        </div>
+        <div id="advanced" class="content-section" style="display: none;">
+            <!-- 高级设置内容 -->
+            <div class="subtitle" style="margin-top: 0;">快捷键</div>
+            <div class="form-group">
+                <label for="quickEnterShortcut">快速输入:</label>
+                <div class="row">
+                    <input type="text" list="shortcuts" id="quickEnterShortcut" name="quickEnterShortcut"
+                        value="Control+Space" onchange="enableButton('setQuickEnterShortcut')"
+                        onfocus="showSuggestions('quickEnterShortcut')" onblur="hideSuggestions('quickEnterShortcut')" 
+                        onkeydown="getShortCutKey(event, 'quickEnterShortcut')">
+
+                    <button id="setQuickEnterShortcut" onclick="setQuickEnterShortcut()">确定</button>
+                </div>
+                <ul class="suggestions" id="quickEnterShortcut-shortcuts" style="display: none;">
+                    <li onclick="selectOption('quickEnterShortcut', 'Control+Space')">Control+Space</li>
+                    <li onclick="selectOption('quickEnterShortcut', 'Alt+Space')">Alt+Space</li>
+                    <!-- Add more options as needed -->
+                </ul>
+                <div class="detail">快速输入可以帮你复制选中内容，并快速打开侧边栏，追加所选内容到提示词框中</div>
+
+                <label for="quickHideAndShow">快速收起/展开:</label>
+                <div class="row">
+                    <input type="text" list="shortcuts" id="quickHideAndShow" name="quickHideAndShow"
+                        value="Control+Alt" onchange="enableButton('setQuickHideAndShow')"
+                        onfocus="showSuggestions('quickHideAndShow')" onblur="hideSuggestions('quickHideAndShow')"
+                        onkeydown="getShortCutKey(event, 'quickHideAndShow')">
+
+                    <button id="setQuickHideAndShow" onclick="setQuickHideAndShow()">确定</button>
+                </div>
+                <ul class="suggestions" id="quickHideAndShow-shortcuts" style="display: none;">
+                    <li onclick="selectOption('quickHideAndShow', 'Control+Alt')">Control+Alt</li>
+                    <!-- Add more options as needed -->
+                </ul>
+                <div class="detail">快速收起/展开可以帮你在误触时快速收起，或者快速唤起并输入</div>
+
+                <label for="sendText">快速发送:</label>
+                <div class="row">
+                    <input type="text" list="shortcuts" id="sendText" name="sendText"
+                        value="Control+Enter" onchange="enableButton('setSendText')"
+                        onfocus="showSuggestions('sendText')" onblur="hideSuggestions('sendText')"
+                        onkeydown="getShortCutKey(event, 'sendText')">
+
+                    <button id="setSendText" onclick="setSendText()">确定</button>
+                </div>
+                <ul class="suggestions" id="sendText-shortcuts" style="display: none;">
+                    <li onclick="selectOption('sendText', 'Control+Enter')">Control+Enter</li>
+                    <!-- Add more options as needed -->
+                </ul>
+                <div class="detail">快速发送可以让你直接提交提示词（默认回车为换行）</div>
+            </div>
+            
+
+            <div class="subtitle">网页</div>
+            <div class="form-group">
+                <label for="gptSite">网址:</label>
+                <div class="row">
+                    <input type="text" id="gptSite" name="gptSite" value="https://www.chat.openai.com/"
+                        onchange="enableButton('setGptSite')">
+                    <button id="setGptSite" onclick="setGptSite()">确定</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="textareaId">输入框HTML ID:</label>
+                <div class="row">
+                    <input type="text" id="textareaId" name="textareaId" value="prompt-textarea"
+                        onchange="enableButton('setTextareaId')">
+                    <button id="setTextareaId" onclick="setTextareaId()">确定</button>
+                </div>
+            </div>
+        </div>
+        <div id="about" class="content-section" style="display: none;">
+            <!-- 关于内容 -->
+            <div class="subtitle" style="margin-top: 0;">关于</div>
+            <!-- github链接 -->
+            <a href="#" onclick="openUrl('github.com/betterandbetterii')">Github仓库</a>
+            <p>作者：@BetterAndBetterII</p>
+            <p>版本：1.0.0</p>
+            <p>开源协议：MIT</p>
+
+        </div>
+        <!-- 其他内容区域 -->
+
+    </div>
+
+    <script src="./renderer.js"></script>
+
+</body>
+
+</html>
+
+<!-- // set-prevent-ratio
+// set-toggle-delay
+// set-prevent-left
+// activeRight
+// togglePeriod -->
