@@ -315,14 +315,14 @@
                 <label for="quickHideAndShow">快速收起/展开:</label>
                 <div class="row">
                     <input type="text" list="shortcuts" id="quickHideAndShow" name="quickHideAndShow"
-                        value="Control+Alt" onchange="enableButton('setQuickHideAndShow')"
+                        value="Alt+Space" onchange="enableButton('setQuickHideAndShow')"
                         onfocus="showSuggestions('quickHideAndShow')" onblur="hideSuggestions('quickHideAndShow')"
                         onkeydown="getShortCutKey(event, 'quickHideAndShow')">
 
                     <button id="setQuickHideAndShow" onclick="setQuickHideAndShow()">确定</button>
                 </div>
                 <ul class="suggestions" id="quickHideAndShow-shortcuts" style="display: none;">
-                    <li onclick="selectOption('quickHideAndShow', 'Control+Alt')">Alt+Space</li>
+                    <li onclick="selectOption('quickHideAndShow', 'Alt+Space')">Alt+Space</li>
                     <!-- Add more options as needed -->
                 </ul>
                 <div class="detail">快速收起/展开可以帮你在误触时快速收起，或者快速唤起并输入</div>
