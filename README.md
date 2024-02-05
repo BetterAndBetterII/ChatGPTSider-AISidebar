@@ -1,5 +1,6 @@
 # ChatGPTSider
 
+[中文](/README zh-CN.md)
 ## GPTSidebar Project
 ### Introduction
 GPTSidebar is an innovative project that leverages the Electron framework to create a convenient and interactive sidebar interface. This project is designed to enhance productivity and user experience by providing easy access to a GPT-based application directly from the desktop.
